@@ -1,0 +1,93 @@
+reset;
+
+model case2.mod;
+include initial_guess.INIVAL;
+option solver ipopt;
+solve;
+
+shell ("del " & ("flag.txt"));
+if match (solve_message, "Optimal") > 0 then
+{
+printf "1">>("flag.txt");
+shell ("del " & ("x.txt"));
+shell ("del " & ("y.txt"));
+shell ("del " & ("t.txt"));
+shell ("del " & ("tf.txt"));
+shell ("del " & ("AX.txt"));
+shell ("del " & ("BX.txt"));
+shell ("del " & ("CX.txt"));
+shell ("del " & ("DX.txt"));
+shell ("del " & ("AY.txt"));
+shell ("del " & ("BY.txt"));
+shell ("del " & ("CY.txt"));
+shell ("del " & ("DY.txt"));
+shell ("del " & ("phy.txt"));
+
+shell ("del " & ("initial_guess.INIVAL"));
+for {K in {1..NC}} {
+	for {i in I} {	
+		printf "let x[%d,%d]:=%5.4f;\n",i,K,x[i,K]>>("initial_guess.INIVAL");
+		printf "let y[%d,%d]:=%5.4f;\n",i,K,y[i,K]>>("initial_guess.INIVAL");
+		printf "let theta[%d,%d]:=%5.4f;\n",i,K,theta[i,K]>>("initial_guess.INIVAL");
+		printf "let AX[%d,%d]:=%5.4f;\n",i,K,AX[i,K]>>("initial_guess.INIVAL");
+		printf "let BX[%d,%d]:=%5.4f;\n",i,K,BX[i,K]>>("initial_guess.INIVAL");
+		printf "let CX[%d,%d]:=%5.4f;\n",i,K,CX[i,K]>>("initial_guess.INIVAL");
+		printf "let DX[%d,%d]:=%5.4f;\n",i,K,DX[i,K]>>("initial_guess.INIVAL");		
+		printf "let AY[%d,%d]:=%5.4f;\n",i,K,AY[i,K]>>("initial_guess.INIVAL");
+		printf "let BY[%d,%d]:=%5.4f;\n",i,K,BY[i,K]>>("initial_guess.INIVAL");
+		printf "let CY[%d,%d]:=%5.4f;\n",i,K,CY[i,K]>>("initial_guess.INIVAL");
+		printf "let DY[%d,%d]:=%5.4f;\n",i,K,DY[i,K]>>("initial_guess.INIVAL");
+	}
+}
+
+for {i in I} {		
+	printf "let v[%d]:=%5.4f;\n",i,v[i]>>("initial_guess.INIVAL");
+	printf "let phy[%d]:=%5.4f;\n",i,phy[i]>>("initial_guess.INIVAL");
+	printf "let a[%d]:=%5.4f;\n",i,a[i]>>("initial_guess.INIVAL");
+	printf "let w[%d]:=%5.4f;\n",i,w[i]>>("initial_guess.INIVAL");	
+}
+
+printf "let tf:=%5.9f;\n",tf>>("initial_guess.INIVAL");
+close ("initial_guess.INIVAL");
+
+for {K in {1..NC}} {
+	for {i in I}{
+		printf "%5.9f; ",  x[i,K]>>("x.txt");
+		printf "%5.9f; ",  y[i,K]>>("y.txt");
+		printf "%5.9f; ",  theta[i,K]>>("t.txt");
+		printf "%5.9f; ",  AX[i,K]>>("AX.txt");
+		printf "%5.9f; ",  BX[i,K]>>("BX.txt");
+		printf "%5.9f; ",  CX[i,K]>>("CX.txt");
+		printf "%5.9f; ",  DX[i,K]>>("DX.txt");
+		printf "%5.9f; ",  AY[i,K]>>("AY.txt");
+		printf "%5.9f; ",  BY[i,K]>>("BY.txt");
+		printf "%5.9f; ",  CY[i,K]>>("CY.txt");
+		printf "%5.9f; ",  DY[i,K]>>("DY.txt");
+	}
+}
+
+for {i in I}{
+	printf "%5.9f; ",  phy[i]>>("phy.txt");
+}
+
+display(tf);
+printf "%5.9f; ",  tf>>("tf.txt");
+close ("tf.txt");
+
+close ("t.txt");
+close ("x.txt");
+close ("y.txt");
+close ("phy.txt");
+close ("AX.txt");
+close ("AY.txt");
+close ("BX.txt");
+close ("BY.txt");
+close ("CX.txt");
+close ("CY.txt");
+close ("DX.txt");
+close ("DY.txt");
+}
+else
+{
+printf "0">>("flag.txt");
+};
