@@ -37,7 +37,7 @@ param CenterPP{i in O, k in {1..2}}; 			# Geometric center of each obstacle
 param AREA{i in O}; 							# Area of each obstacle
 
 param initial_config {i in {1..(7+NC-1)}}; 		# Initial configuration
-param terminal_config {i in {1..(7+NC-1)}}; 	# Terminal configuration
+param terminal_config {i in {1..5}}; 			# Terminal configuration
 
 ########### Bounds on the state/control profiles ###################### 
 param amax == 0.25;
@@ -146,7 +146,6 @@ CY[i,1] = y[i,1] - TM * sin(theta[i,1]) - TB * cos(theta[i,1]);
 s.t. RELATIONSHIP_DY1 {i in I}:
 DY[i,1] = y[i,1] - TM * sin(theta[i,1]) + TB * cos(theta[i,1]);
 
-
 s.t. RELATIONSHIP_AX2toN {pp in {2..NC},i in I}:
 AX[i,pp] = x[i,pp] + (TT1) * cos(theta[i,pp]) - TB * sin(theta[i,pp]);
 
@@ -170,7 +169,6 @@ CY[i,pp] = y[i,pp] - TT2 * sin(theta[i,pp]) - TB * cos(theta[i,pp]);
 
 s.t. RELATIONSHIP_DY2toN {pp in {2..NC},i in I}:
 DY[i,pp] = y[i,pp] - TT2 * sin(theta[i,pp]) + TB * cos(theta[i,pp]);
-
 
 
 ############# Two-point boundary conditions #################### 
@@ -205,33 +203,40 @@ a[1] = initial_config[9];
 s.t. EQ_starting_w :
 w[1] = initial_config[10];
 
-
-
 s.t. Eq_end_AX {pp in {1..NC}}:
 (AX[NE,pp] - terminal_config[1])^2 <= 8^2;
+
 s.t. Eq_end_BX {pp in {1..NC}}:
 (BX[NE,pp] - terminal_config[1])^2 <= 8^2;
+
 s.t. Eq_end_CX {pp in {1..NC}}:
 (CX[NE,pp] - terminal_config[1])^2 <= 8^2;
+
 s.t. Eq_end_DX {pp in {1..NC}}:
 (DX[NE,pp] - terminal_config[1])^2 <= 8^2;
+
 s.t. Eq_end_AY {pp in {1..NC}}:
 (AY[NE,pp] - terminal_config[2])^2 <= 1.3^2;
+
 s.t. Eq_end_BY {pp in {1..NC}}:
 (BY[NE,pp] - terminal_config[2])^2 <= 1.3^2;
+
 s.t. Eq_end_CY {pp in {1..NC}}:
 (CY[NE,pp] - terminal_config[2])^2 <= 1.3^2;
+
 s.t. Eq_end_DY {pp in {1..NC}}:
 (DY[NE,pp] - terminal_config[2])^2 <= 1.3^2;
 
 s.t. EQ_ending_v :
 v[NE] = terminal_config[3];
+
 s.t. EQ_ending_a :
 a[NE] = terminal_config[4];
+
 s.t. EQ_ending_w :
 w[NE] = terminal_config[5];
-############## Bounded constraints #################### 
 
+############## Bounded constraints #################### 
 s.t. Bonds_v {i in I}:
 v[i]^2 <= vmax^2;
 
@@ -246,8 +251,6 @@ phy[i]^2 <= phymax^2;
 
 s.t. Jerk_avoidance {pp in {1..(NC-1)},i in I}:
 (theta[i,pp] - theta[i,(pp+1)])^2 <= 2.4649;
-
-
 
 ############## Collison-avoidance constraints ####################
 s.t. eq_PPPoutsideABCD  {pp in V,i in I, jj in {1..4},nn in O}:

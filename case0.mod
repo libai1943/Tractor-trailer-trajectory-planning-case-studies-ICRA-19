@@ -37,7 +37,7 @@ param CenterPP{i in O, k in {1..2}}; 			# Geometric center of each obstacle
 param AREA{i in O}; 							# Area of each obstacle
 
 param initial_config {i in {1..(7+NC-1)}}; 		# Initial configuration
-param terminal_config {i in {1..(7+NC-1)}}; 	# Terminal configuration
+param terminal_config {i in {1..5}}; 			# Terminal configuration
 
 ########### Bounds on the state/control profiles ###################### 
 param amax == 0.25;
@@ -171,7 +171,6 @@ s.t. RELATIONSHIP_DY2toN {pp in {2..NC},i in I}:
 DY[i,pp] = y[i,pp] - TT2 * sin(theta[i,pp]) + TB * cos(theta[i,pp]);
 
 
-
 ############# Two-point boundary conditions #################### 
 s.t. EQ_starting_x :
 x[1,1] = initial_config[1];
@@ -198,7 +197,6 @@ v[i]^2 <= vmax^2;
 
 s.t. Bonds_phy {i in I}:
 phy[i]^2 <= phymax^2;
-
 
 
 data;

@@ -4,7 +4,7 @@ tol		1e-6
 bound_push	0.0001
 mu_strategy	adaptive
 linear_solver	ma57
-print_level	0
+print_level	5
 print_frequency_iter	10
 
 
